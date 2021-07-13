@@ -4,7 +4,7 @@ using UnityEngine;
 using SFB;
 
 /// <summary>
-/// Requests the user select a `.csv` file.
+/// Requests the user select .csv and .ply file.
 /// Reads the points from the file.
 /// Splits the points into multiple children each of which is a PointCloud object with a portion of the points.
 /// </summary>
@@ -14,8 +14,10 @@ public class PointCloudGenerator : MonoBehaviour
 
     // maintained reference to the generated children (point cloud objects)
     private GameObject[] pointClouds;
-    // the points read from the data file
-    private List<Vector4> data;
+    // the point position read from the data file
+    private List<Vector3> data_pos;
+    // the point color read from the data file
+    private List<Vector3> data_col;
     // the number of points read from the data file
     int numPoints = 0;
     // the number of point clouds that will be generated from the collection of points
@@ -46,11 +48,11 @@ public class PointCloudGenerator : MonoBehaviour
         {
             case "csv":
             case "CSV":
-                data = CSVReader.ReadPoints(filePath);
+                CSVReader.ReadPoints(filePath,out data_pos,out data_col);
                 break;
             case "ply":
             case "PLY":
-                data = PLYReader.ReadPoints(filePath);
+                PLYReader.ReadPoints(filePath, out data_pos, out data_col);
                 break;
             default:
                 print("Error: Please specify a properly formatted CSV or binary PLY file.");
@@ -58,7 +60,8 @@ public class PointCloudGenerator : MonoBehaviour
                 return;
         }
 
-        numPoints = data.Count;
+        // Number of PointCloud
+        numPoints = data_pos.Count;
         if (numPoints <= 0)
         {
             print("Error: failed to read points from " + paths[0]);
@@ -83,20 +86,19 @@ public class PointCloudGenerator : MonoBehaviour
             int offset = i * numPointsPerCloud;
             // generate a subset of data for this point cloud
             Vector3[] positions = new Vector3[numPointsPerCloud];
-            float[] normalizedSignalStrength = new float[numPointsPerCloud];
+            Vector3[] colors = new Vector3[numPointsPerCloud];
             for (int j = 0; j < numPointsPerCloud; j++)
             {
-                // normalzied signal strength stored in the 4th component of the vector
-                normalizedSignalStrength[j] = data[offset + j].w * 0.3f;
 
                 // position stored in the first 3 elements of the vector (conversion handled by implicit cast)
-                positions[j] = data[offset + j];
+                positions[j] = data_pos[offset + j];
+                colors[j] = data_col[offset + j];
             }
 
             // Create the point cloud using the subset of data
-            GameObject obj = new GameObject("Empty");
+            GameObject obj = new GameObject("PointCloud Division "+i);
             obj.transform.SetParent(transform, false);
-            obj.AddComponent<PointCloud>().CreateMesh(positions, normalizedSignalStrength);
+            obj.AddComponent<PointCloud>().CreateMesh(positions, colors);
             obj.GetComponent<MeshRenderer>().material = pointCloudMaterial;
             pointClouds[i] = obj;
         }

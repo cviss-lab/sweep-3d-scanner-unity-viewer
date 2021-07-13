@@ -5,34 +5,35 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 /// <summary>
-/// Naively parses a csv file of the expected structure into an array of Vector4 objects.
-/// Each Vector4 represents a point, where the x,y,z components are the position and the w component holds normalized signal strength.
+/// Naively parses a csv file of an expected structure into Vector3 position array and Vector3 color array.
+/// Expected structure is vertices with following attributes ONLY: x,y,z,R,G,B.
+/// Vector3 positions represents the coordinates of a point, Vector3 colors represents the color of a point.
 /// Handles the conversion from centimeters to meters.
 /// Handles the conversion from right handed coordinates where z is up, to unity's left handed coordinates where y is up.
 /// </summary>
 public class CSVReader
 {
+    // Parser
     static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
     static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 
-    public static List<Vector4> ReadPoints(string file)
+    public static void ReadPoints(string file, out List<Vector3> positions, out List<Vector3> colors)
     {
+        positions = new List<Vector3>();
+        colors = new List<Vector3>();
         try
         {
             string data = System.IO.File.ReadAllText(file);
             string[] lines = Regex.Split(data, LINE_SPLIT_RE);
 
             int numPoints = lines.Length - 1;
-            if (numPoints <= 0)
-                return null;
 
             // check if the .csv contains a column for scan index
             string header = lines[0];
             int offset = header.Contains("SCAN_INDEX") ? 1 : 0;
             bool bContainsSigStrength = header.Contains("SIGNAL_STRENGTH");
 
-            List<Vector4> points = new List<Vector4>();
-            float x, y, z, normalizedSignalStrength;
+            float x, y, z, R, G, B;
             for (int i = 0; i < numPoints; i++)
             {
                 string[] row = Regex.Split(lines[i + 1], SPLIT_RE);
@@ -44,18 +45,19 @@ public class CSVReader
                 z = 0.01f * float.Parse(row[1 + offset]);
                 y = 0.01f * float.Parse(row[2 + offset]);
 
-                // Read the signal strength and normalize it. ie: [0 : 254] => [0.0f : 1.0f]
-                normalizedSignalStrength = bContainsSigStrength ? (float.Parse(row[3 + offset]) / 254.0f) : 0.75f;
+                // Read RBG color
+                R = float.Parse(row[3 + offset]);
+                G = float.Parse(row[4 + offset]);
+                B = float.Parse(row[5 + offset]);
 
-                // Package the position and signal strength into a single 4 element vector
-                points.Add(new Vector4(x, y, z, normalizedSignalStrength));
+                // Return position and color
+                positions.Add(new Vector3(x, y, z));
+                colors.Add(new Vector3(R, G, B));
             }
-
-            return points;
         }
         catch (Exception e)
         {
-            return new List<Vector4>();
+            Application.Quit();
         }
     }
 }

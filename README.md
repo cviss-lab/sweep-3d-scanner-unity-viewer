@@ -28,6 +28,7 @@ Main Viewer                |  Miniature Viewer
 - `Z` & `C`: adjust the scale of the point cloud (only available in miniature scene)
 - `R` & `T`: adjust the yaw rotation of the point cloud (only available in miniature scene)
 - `ESC`: exit application
+- `M`: switch mode
 
 ### Notes on VR
 - Support for VR is included.

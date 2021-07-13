@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 
 public class EnablePointSize : MonoBehaviour
 {
+    //const UInt32 GL_VERTEX_PROGRAM_POINT_SIZE = 0x8642;
     const UInt32 GL_VERTEX_PROGRAM_POINT_SIZE = 0x8642;
     const UInt32 GL_POINT_SMOOTH = 0x0B10;
 

@@ -41,6 +41,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        private bool isRoomSize = false;
 
         // Use this for initialization
         private void Start()
@@ -81,6 +82,25 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
+
+
+
+            // Speed Changer
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                if (isRoomSize == false)
+                {
+                    m_StepInterval *= 6;
+                    m_WalkSpeed *= 6;
+                    isRoomSize = true;
+                }
+                else
+                {
+                    m_StepInterval /= 6;
+                    m_WalkSpeed /= 6;
+                    isRoomSize = false;
+                }
+            }
         }
 
 

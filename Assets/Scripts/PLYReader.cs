@@ -6,20 +6,27 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 /// <summary>
-/// Naively parses a ply file of an expected structure into an array of Vector4 objects.
-/// Expected structure is vertices with following attributes ONLY: float x, float y, float z, u_char signal_strength
-/// Each Vector4 represents a point, where the x,y,z components are the position and the w component holds normalized signal strength.
+/// Naively parses a ply file of an expected structure into Vector3 position array and Vector3 color array.
+/// Expected structure is vertices with following attributes ONLY: float x, float y, float z, u_char R, u_char G,u_char B.
+/// Vector3 positions represents the coordinates of a point, Vector3 colors represents the color of a point.
 /// Handles the conversion from centimeters to meters.
 /// Handles the conversion from right handed coordinates where z is up, to unity's left handed coordinates where y is up.
 /// </summary>
+
+
+
 public class PLYReader
 {
-    public static List<Vector4> ReadPoints(string file)
+    public static void ReadPoints(string file, out List<Vector3> positions, out List<Vector3> colors)
     {
+        // Initial the output
+        positions = new List<Vector3>();
+        colors = new List<Vector3>();
+
         // Check file exists
         if (!File.Exists(file))
         {
-            return new List<Vector4>();
+            Application.Quit();
         }
 
         try
@@ -54,7 +61,7 @@ public class PLYReader
                             }
                             else
                             {
-                                return new List<Vector4>();
+                                Application.Quit();
                             }
                         }
                     }
@@ -63,30 +70,47 @@ public class PLYReader
                         buildingLine += nextChar;
                     }
                 }
-                
+
                 // Read the vertices
-                List<Vector4> points = new List<Vector4>();
-                float x, y, z, normalizedSignalStrength;
+                float x, y, z, R, G, B;
+                // Correct offset of the coordinates
+                float x_sum, y_sum, z_sum;
+                x_sum = y_sum = z_sum = 0;
+                // Correct scale of the coordinates
+
                 for (int i = 0; i < vertexCount; i++)
                 {
-                    // Read the position
+                    // Read position
                     // convert from the centimeters to meters, and flip z and y (RHS to LHS)
-                    x = 0.01f * reader.ReadSingle();
-                    z = 0.01f * reader.ReadSingle();
-                    y = 0.01f * reader.ReadSingle();
+                    x = 1f * reader.ReadSingle();
+                    z = 1f * reader.ReadSingle();
+                    y = 1f * reader.ReadSingle();
 
-                    // Read the signal strength and normalize it. ie: [0 : 254] => [0.0f : 1.0f]
-                    normalizedSignalStrength = 1.0f * reader.ReadByte() / 254.0f;
+                    // Read color
+                    R = 1.0f * reader.ReadByte();
+                    G = 1.0f * reader.ReadByte();
+                    B = 1.0f * reader.ReadByte();
 
-                    // Package the position and signal strength into a single 4 element vector
-                    points.Add(new Vector4(x, y, z, normalizedSignalStrength));
+                    // Center
+                    x_sum += x;
+                    y_sum += y;
+                    z_sum += z;
+                    // Return the result
+                    positions.Add(new Vector3(x, y, z));
+                    colors.Add(new Vector3(R,G,B));
                 }
-                return points;
+                // Correct offset of the coordinates
+                for (int i = 0; i < vertexCount; i++)
+                {
+                    Vector3 offset = new Vector3(x_sum / vertexCount, y_sum / vertexCount, z_sum / vertexCount);
+                    positions[i] = positions[i] - offset;
+                }
+
             }
         }
         catch (Exception e)
         {
-            return new List<Vector4>();
+            Application.Quit();
         }
     }
 }

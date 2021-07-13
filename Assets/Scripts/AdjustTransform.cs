@@ -11,10 +11,15 @@ public class AdjustTransform : MonoBehaviour
     public bool userCanAdjustHeight = true;
     public float heightAdjustSensitivity = 0.01f;
     public bool userCanAdjustScale = true;
-    public float scaleAdjustSensitivity = 0.005f;
+    public float scaleAdjustSensitivity = 0.002f;
     public bool userCanAdjustYaw = true;
     public float yawAdjustSensitivity = 0.15f;
 
+    //Switch Mode
+    private bool isRoomSize = false;
+    public float sizeRatio = 6;
+
+    
     // Use this for initialization
     void Start()
     {
@@ -59,6 +64,24 @@ public class AdjustTransform : MonoBehaviour
             {
                 if (transform.localScale.x > scaleAdjustSensitivity * 4)
                     transform.localScale -= new Vector3(scaleAdjustSensitivity, scaleAdjustSensitivity, scaleAdjustSensitivity);
+            }
+        }
+        // Switch Mode
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (isRoomSize == false)
+            {
+                userCanAdjustScale = false;
+                userCanAdjustYaw = false;
+                transform.localScale += new Vector3(8, 8, 8);
+                isRoomSize = true;
+            }
+            else
+            {
+                userCanAdjustScale = true;
+                userCanAdjustYaw = true;
+                transform.localScale -= new Vector3(8, 8, 8);
+                isRoomSize = false;
             }
         }
     }

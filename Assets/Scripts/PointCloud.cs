@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Creates a mesh where each vertex is a point, and the color for each vertex is proportional to its signal strength.
+/// Creates a mesh where each vertex is a point.
 /// </summary>
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class PointCloud : MonoBehaviour
@@ -13,9 +13,9 @@ public class PointCloud : MonoBehaviour
     int numPoints = 0;
 
     // Creates the gameObject's mesh using the provided points and signal strength values
-    public void CreateMesh(Vector3[] points, float[] normalizedSignalStrength)
+    public void CreateMesh(Vector3[] positions, Vector3[] RGBs)
     {
-        numPoints = points.Length;
+        numPoints = positions.Length;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
@@ -24,11 +24,11 @@ public class PointCloud : MonoBehaviour
         for (int i = 0; i < numPoints; ++i)
         {
             indices[i] = i;
-            // map the normalized signal strength onto the hue spectrum in HSV color space
-            colors[i] = Color.HSVToRGB(normalizedSignalStrength[i], 1.0f, 1.0f);
+            // Map RGB color [0,255] to [0,1]
+            colors[i] = new Color(RGBs[i][0]/254.0f, RGBs[i][1]/254.0f, RGBs[i][2]/ 254.0f);
         }
-
-        mesh.vertices = points;
+        // Bind point to mesh
+        mesh.vertices = positions;
         mesh.colors = colors;
         mesh.SetIndices(indices, MeshTopology.Points, 0);
     }
