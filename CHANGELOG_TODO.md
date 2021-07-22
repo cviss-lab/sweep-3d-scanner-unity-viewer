@@ -5,5 +5,11 @@
 - Added function of coordinates offset correction.
 - Added function of transform from top-down scale to room scale. 
 
+## 7/22/2021
+- Optimize the process of transforming from top-down scale to room scale.  
+- Create a new branch: vrsupport
+- Add VR support
+
 # To-DO
-- Optimize the process of transforming from top-down scale to room scale. 
+- Add movement and transformation control using VR
+  
