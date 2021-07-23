@@ -9,7 +9,9 @@
 - Optimize the process of transforming from top-down scale to room scale.  
 - Create a new branch: vrsupport
 - Add VR support
+- Add movement and transformation control using VR
 
 # To-DO
-- Add movement and transformation control using VR
+- Standardize Control System
+- Add more functions
   

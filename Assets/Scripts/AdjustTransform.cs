@@ -56,18 +56,18 @@ public class AdjustTransform : MonoBehaviour
         // Check for scale adjustment
         if (userCanAdjustScale)
         {
-            if (Input.GetKey(KeyCode.Z))
+            if (OVRInput.Get(OVRInput.Button.Three))
             {
                 transform.localScale += new Vector3(scaleAdjustSensitivity, scaleAdjustSensitivity, scaleAdjustSensitivity);
             }
-            if (Input.GetKey(KeyCode.C))
+            if (OVRInput.Get(OVRInput.Button.Four))
             {
                 if (transform.localScale.x > scaleAdjustSensitivity * 4)
                     transform.localScale -= new Vector3(scaleAdjustSensitivity, scaleAdjustSensitivity, scaleAdjustSensitivity);
             }
         }
-        // Switch Mode
-        if (Input.GetKeyDown(KeyCode.M))
+
+        if(OVRInput.GetDown(OVRInput.Button.Two))
         {
             if (isRoomSize == false)
             {
