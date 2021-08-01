@@ -14,19 +14,27 @@ public class AdjustTable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (OVRInput.GetDown(OVRInput.Button.Two))
+        if (OVRInput.GetDown(OVRInput.Button.Two) && OVRInput.GetDown(OVRInput.Button.One))
         {
-            if (isRoomSize == false)
-            {
-                GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
-                isRoomSize = true;
-            }
-            else
-            {
-                GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
-                isRoomSize = false;
-            }
 
         }
     }
+    public void hideTable()
+    {
+        if(isRoomSize ==true)
+        {
+            GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
+            isRoomSize = false;
+        }
+    }
+    public void showTable()
+    {
+        if (isRoomSize == false)
+        {
+            GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
+            isRoomSize = true;
+        }
+    }
+
+
 }

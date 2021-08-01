@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class AdjustTransform : MonoBehaviour
 {
-    // the initial scale
-    public float initialScale = 1.0f;
-
+    private float initialScale = 0.1f;
     // toggle and sensitivity for controlling the point cloud transform
-    public bool userCanAdjustHeight = true;
-    public float heightAdjustSensitivity = 0.01f;
-    public bool userCanAdjustScale = true;
-    public float scaleAdjustSensitivity = 0.002f;
-    public bool userCanAdjustYaw = true;
-    public float yawAdjustSensitivity = 0.15f;
-
-    //Switch Mode
+    private bool userCanAdjustHeight = true;
+    private float heightAdjustSensitivity = 0.01f;
+    private bool userCanAdjustScale = true;
+    private float scaleAdjustSensitivity = 0.01f;
+    private bool userCanAdjustYaw = true;
+    private float yawAdjustSensitivity = 0.15f;
     private bool isRoomSize = false;
-    public float sizeRatio = 6;
+    private float sizeRatio = 5;
+    //Switch Mode
 
-    
+
+
+
     // Use this for initialization
     void Start()
     {
@@ -29,26 +28,27 @@ public class AdjustTransform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Check for vertical adjustment
         if (userCanAdjustHeight)
         {
-            if (Input.GetKey(KeyCode.E))
+            if (OVRInput.Get(OVRInput.Button.Four) && OVRInput.Get(OVRInput.Button.PrimaryHandTrigger)&&!OVRInput.Get(OVRInput.Button.Three))
             {
                 transform.Translate(new Vector3(0.0f, heightAdjustSensitivity, 0.0f));
+                
             }
-            if (Input.GetKey(KeyCode.Q))
+            if (OVRInput.Get(OVRInput.Button.Four) && OVRInput.Get(OVRInput.Button.SecondaryHandTrigger) && !OVRInput.Get(OVRInput.Button.Three))
             {
                 transform.Translate(new Vector3(0.0f, -heightAdjustSensitivity, 0.0f));
             }
+            
         }
         // Check for yaw adjustment
         if (userCanAdjustYaw)
         {
-            if (Input.GetKey(KeyCode.R))
+            if (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.PrimaryHandTrigger) && !OVRInput.Get(OVRInput.Button.Four))
             {
                 transform.Rotate(0.0f, -yawAdjustSensitivity, 0.0f);
             }
-            if (Input.GetKey(KeyCode.T))
+            if (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.SecondaryHandTrigger) && !OVRInput.Get(OVRInput.Button.Four))
             {
                 transform.Rotate(0.0f, yawAdjustSensitivity, 0.0f);
             }
@@ -56,33 +56,40 @@ public class AdjustTransform : MonoBehaviour
         // Check for scale adjustment
         if (userCanAdjustScale)
         {
-            if (OVRInput.Get(OVRInput.Button.Three))
+            if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger)&& !OVRInput.Get(OVRInput.Button.Three)&& !OVRInput.Get(OVRInput.Button.Four))
             {
                 transform.localScale += new Vector3(scaleAdjustSensitivity, scaleAdjustSensitivity, scaleAdjustSensitivity);
             }
-            if (OVRInput.Get(OVRInput.Button.Four))
+            if (OVRInput.Get(OVRInput.Button.SecondaryHandTrigger) && !OVRInput.Get(OVRInput.Button.Three) && !OVRInput.Get(OVRInput.Button.Four))
             {
                 if (transform.localScale.x > scaleAdjustSensitivity * 4)
                     transform.localScale -= new Vector3(scaleAdjustSensitivity, scaleAdjustSensitivity, scaleAdjustSensitivity);
             }
         }
+    }
 
-        if(OVRInput.GetDown(OVRInput.Button.Two))
+    public void Transfrom2modelScale()
+    {
+        if (isRoomSize == true)
         {
-            if (isRoomSize == false)
-            {
-                userCanAdjustScale = false;
-                userCanAdjustYaw = false;
-                transform.localScale += new Vector3(8, 8, 8);
-                isRoomSize = true;
-            }
-            else
-            {
-                userCanAdjustScale = true;
-                userCanAdjustYaw = true;
-                transform.localScale -= new Vector3(8, 8, 8);
-                isRoomSize = false;
-            }
+            userCanAdjustScale = true;
+            userCanAdjustYaw = true;
+            transform.localScale -= new Vector3(sizeRatio, sizeRatio, sizeRatio);
+            heightAdjustSensitivity /= sizeRatio * 4;
+            isRoomSize = false;
         }
+    }
+
+    public void Transfrom2roomScale()
+    {
+        if (isRoomSize == false)
+        {
+            userCanAdjustScale = false;
+            userCanAdjustYaw = false;
+            transform.localScale += new Vector3(sizeRatio, sizeRatio, sizeRatio);
+            heightAdjustSensitivity *= sizeRatio * 4;
+            isRoomSize = true;
+        }
+
     }
 }

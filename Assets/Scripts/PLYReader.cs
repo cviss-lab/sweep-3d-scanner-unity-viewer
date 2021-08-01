@@ -15,7 +15,7 @@ using UnityEngine;
 
 
 
-public class PLYReader
+public class PLYReader:MonoBehaviour
 {
     public static void ReadPoints(string file, out List<Vector3> positions, out List<Vector3> colors)
     {
@@ -99,13 +99,15 @@ public class PLYReader
                     positions.Add(new Vector3(x, y, z));
                     colors.Add(new Vector3(R,G,B));
                 }
+
                 // Correct offset of the coordinates
+                Vector3 offset = new Vector3();
                 for (int i = 0; i < vertexCount; i++)
                 {
-                    Vector3 offset = new Vector3(x_sum / vertexCount, y_sum / vertexCount, z_sum / vertexCount);
+                    offset = new Vector3(x_sum / vertexCount, y_sum / vertexCount, z_sum / vertexCount);
                     positions[i] = positions[i] - offset;
                 }
-
+                Debug.Log(offset);
             }
         }
         catch (Exception e)

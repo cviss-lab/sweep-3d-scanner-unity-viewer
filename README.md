@@ -15,10 +15,15 @@ VR support version.
 
 ### Oculus Controller
 - `HMD`: look around
-- `LeftJoyStick`: movement
-- `RightJoyStick`: rotate POV
-- `B`: transform between top-down scale and room scale
-- `X` & `Y`: adjust the scale of the point cloud (only available in top-down scene)
+- `LeftThumbstick`: movement
+- `RightThumbstick`: rotate POV
+- `B`: back
+- `A`: open function menu
+- `A` + `B`: transform from top-down scale to room scale
+- `IndexTrigger`: selection
+- `Y`+`HandTrigger`: adjust the height of the point cloud
+- `HandTrigger`: adjust the scale of the point cloud (only available in top-down scene)
+- `X`+`HandTrigger`: adjust the yaw rotation of the point cloud (only available in top-down scene, cycle change)
 
 
 
