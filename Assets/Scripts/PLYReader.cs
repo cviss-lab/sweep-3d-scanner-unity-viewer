@@ -34,16 +34,24 @@ public class PLYReader:MonoBehaviour
             // Interpret File
             using (BinaryReader reader = new BinaryReader(File.Open(file, FileMode.Open)))
             {
-                int fileLength = (int)reader.BaseStream.Length;
-                string buildingLine = "";
+                // pointcloud attributes
                 int vertexCount = 0;
-                int charSize = sizeof(char);
+                int uselessProperties = 0;
+                bool hasUselessProperties = false;
+                bool hasColor = false;
 
-                // read the header
+                // help to read file
+                int charSize = sizeof(char);
+                int fileLength = (int)reader.BaseStream.Length;
                 int numRead = 0;
+                char nextChar;
+                string buildingLine = "";
+
+
+                // process the header
                 while ((numRead += charSize) < fileLength)
                 {
-                    char nextChar = reader.ReadChar();
+                    nextChar = reader.ReadChar();
                     if (nextChar == '\n')
                     {
                         if (buildingLine.Contains("end_header"))
@@ -64,6 +72,17 @@ public class PLYReader:MonoBehaviour
                                 Application.Quit();
                             }
                         }
+                        else if (buildingLine.Contains("red") || buildingLine.Contains("green") || buildingLine.Contains("blue"))
+                        {
+                            hasColor = true;
+                            buildingLine = "";
+                        }
+                        else if (buildingLine.Contains("property float")&& !buildingLine.Contains("property float x")&& !buildingLine.Contains("property float y")&& !buildingLine.Contains("property float z"))
+                        {
+                            hasUselessProperties = true;
+                            uselessProperties++;
+
+                        }
                     }
                     else
                     {
@@ -76,7 +95,7 @@ public class PLYReader:MonoBehaviour
                 // Correct offset of the coordinates
                 float x_sum, y_sum, z_sum;
                 x_sum = y_sum = z_sum = 0;
-                // Correct scale of the coordinates
+
 
                 for (int i = 0; i < vertexCount; i++)
                 {
@@ -86,18 +105,38 @@ public class PLYReader:MonoBehaviour
                     z = 1f * reader.ReadSingle();
                     y = 1f * reader.ReadSingle();
 
-                    // Read color
-                    R = 1.0f * reader.ReadByte();
-                    G = 1.0f * reader.ReadByte();
-                    B = 1.0f * reader.ReadByte();
+                    // If the pointcloud has color property
+                    if(hasColor)
+                    {
+                        // Read color
+                        R = 1.0f * reader.ReadByte();
+                        G = 1.0f * reader.ReadByte();
+                        B = 1.0f * reader.ReadByte();
 
+                    }
+                    else
+                    {
+                        R = G = B = 100.0f;
+                    }
+
+                    // If the pointcloud has useless property
+                    if (hasUselessProperties)
+                    {
+                        for(int p = 0;p<uselessProperties;p++)
+                        {
+                            reader.ReadSingle();
+                        }
+                    }
+                    
                     // Center
                     x_sum += x;
                     y_sum += y;
                     z_sum += z;
+
                     // Return the result
                     positions.Add(new Vector3(x, y, z));
-                    colors.Add(new Vector3(R,G,B));
+                    colors.Add(new Vector3(R, G, B));
+
                 }
 
                 // Correct offset of the coordinates
