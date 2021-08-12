@@ -14,14 +14,17 @@ public class AdjustTransform : MonoBehaviour
     private float yawAdjustSensitivity = 0.15f;
     // ten times smaller
     private bool isRoomSize = false;
-    private float sizeRatio = 0.9f;
-
+    private float modelScale = 0.1f;
+    // table height
+    public float tableHeight = 1.2f;
 
     // Use this for initialization
     void Start()
     {
         transform.localScale = new Vector3(initialScale, initialScale, initialScale);
-        transform.localScale -= new Vector3(sizeRatio, sizeRatio, sizeRatio);
+        // model scale initial
+        transform.localScale = new Vector3(modelScale, modelScale, modelScale);
+        transform.position += new Vector3(0, tableHeight, 0);
     }
 
     // Update is called once per frame
@@ -73,8 +76,9 @@ public class AdjustTransform : MonoBehaviour
         {
             userCanAdjustScale = true;
             userCanAdjustYaw = true;
-            transform.localScale -= new Vector3(sizeRatio, sizeRatio, sizeRatio);
+            transform.localScale = new Vector3(modelScale, modelScale, modelScale);
             isRoomSize = false;
+            transform.Translate(new Vector3(0, tableHeight, 0));
         }
     }
 
@@ -84,8 +88,9 @@ public class AdjustTransform : MonoBehaviour
         {
             userCanAdjustScale = false;
             userCanAdjustYaw = false;
-            transform.localScale += new Vector3(sizeRatio, sizeRatio, sizeRatio);
+            transform.localScale = new Vector3(initialScale,initialScale,initialScale);
             isRoomSize = true;
+            transform.Translate(new Vector3(0, -tableHeight, 0));
         }
 
     }

@@ -105,4 +105,10 @@ public class PointCloudGenerator : MonoBehaviour
 
     }
 
+
+    public void generateGround()
+    {
+
+    }
+
 }

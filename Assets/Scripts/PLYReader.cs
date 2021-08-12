@@ -166,10 +166,15 @@ public class PLYReader:MonoBehaviour
                 }
                 
                 float yLowest = float.MaxValue;
-                foreach (var key in suspectPoints.Keys)
+                if (suspectPoints.Count == 0) yLowest = 0;
+                else
                 {
-                    if (key < yLowest) yLowest = (float)key; 
+                    foreach (var key in suspectPoints.Keys)
+                    {
+                        if (key < yLowest) yLowest = (float)key;
+                    }
                 }
+
 
                 // Correct offset of the coordinates
                 Vector3 offset = new Vector3();
