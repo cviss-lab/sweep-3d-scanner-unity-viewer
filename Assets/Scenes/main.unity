@@ -657,6 +657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b00d806a9633454a9fc928ebda86d1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialScale: 1
 --- !u!114 &401532116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1257,7 +1258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.32
+      value: -2.038
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1293,7 +1294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.02
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_ClearFlags
@@ -1320,6 +1321,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 14300000, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
+      propertyPath: m_Height
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 14300000, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20131489337305086, guid: ce816f2e6abb0504092c23ed9b970dfd,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -1620,7 +1630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4897607310870066, guid: a9d2de84afb308a4796cc671d3432b4d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.155
       objectReference: {fileID: 0}
     - target: {fileID: 4897607310870066, guid: a9d2de84afb308a4796cc671d3432b4d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2624,7 +2634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1496471116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2657,9 +2667,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Annotation: {fileID: 1565921248}
-  lookat: {fileID: 2056903292}
-  target: {fileID: 1132334213}
-  rotateSpeed: 2
 --- !u!1001 &1532371681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2752,7 +2759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1565921249
 MonoBehaviour:
   m_ObjectHideFlags: 0

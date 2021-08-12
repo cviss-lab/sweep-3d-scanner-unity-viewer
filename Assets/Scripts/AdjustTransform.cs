@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AdjustTransform : MonoBehaviour
 {
-    private float initialScale = 0.1f;
+    public float initialScale = 1.0f;
     // toggle and sensitivity for controlling the point cloud transform
     private bool userCanAdjustHeight = true;
     private float heightAdjustSensitivity = 0.01f;
@@ -12,17 +12,16 @@ public class AdjustTransform : MonoBehaviour
     private float scaleAdjustSensitivity = 0.01f;
     private bool userCanAdjustYaw = true;
     private float yawAdjustSensitivity = 0.15f;
+    // ten times smaller
     private bool isRoomSize = false;
-    private float sizeRatio = 5;
-    //Switch Mode
-
-
+    private float sizeRatio = 0.9f;
 
 
     // Use this for initialization
     void Start()
     {
         transform.localScale = new Vector3(initialScale, initialScale, initialScale);
+        transform.localScale -= new Vector3(sizeRatio, sizeRatio, sizeRatio);
     }
 
     // Update is called once per frame
@@ -75,7 +74,6 @@ public class AdjustTransform : MonoBehaviour
             userCanAdjustScale = true;
             userCanAdjustYaw = true;
             transform.localScale -= new Vector3(sizeRatio, sizeRatio, sizeRatio);
-            heightAdjustSensitivity /= sizeRatio * 4;
             isRoomSize = false;
         }
     }
@@ -87,7 +85,6 @@ public class AdjustTransform : MonoBehaviour
             userCanAdjustScale = false;
             userCanAdjustYaw = false;
             transform.localScale += new Vector3(sizeRatio, sizeRatio, sizeRatio);
-            heightAdjustSensitivity *= sizeRatio * 4;
             isRoomSize = true;
         }
 

@@ -29,6 +29,7 @@ public class PLYReader:MonoBehaviour
             Application.Quit();
         }
 
+
         try
         {
             // Interpret File
@@ -81,7 +82,6 @@ public class PLYReader:MonoBehaviour
                         {
                             hasUselessProperties = true;
                             uselessProperties++;
-
                         }
                     }
                     else
@@ -92,18 +92,21 @@ public class PLYReader:MonoBehaviour
 
                 // Read the vertices
                 float x, y, z, R, G, B;
-                // Correct offset of the coordinates
-                float x_sum, y_sum, z_sum;
-                x_sum = y_sum = z_sum = 0;
-
+                // Find the center
+                float x_sum, z_sum;
+                x_sum = z_sum = 0;
+                // Find the ground
+                Dictionary<double, int> yCount = new Dictionary<double, int>();
+                double y_round;
 
                 for (int i = 0; i < vertexCount; i++)
                 {
                     // Read position
-                    // convert from the centimeters to meters, and flip z and y (RHS to LHS)
-                    x = 1f * reader.ReadSingle();
-                    z = 1f * reader.ReadSingle();
-                    y = 1f * reader.ReadSingle();
+                    // Flip z and y (RHS to LHS)
+                    // Meters Unit
+                    x = 1.0f * reader.ReadSingle();
+                    z = 1.0f * reader.ReadSingle();
+                    y = 1.0f * reader.ReadSingle();
 
                     // If the pointcloud has color property
                     if(hasColor)
@@ -127,11 +130,21 @@ public class PLYReader:MonoBehaviour
                             reader.ReadSingle();
                         }
                     }
-                    
-                    // Center
+
+                    // Find the center
                     x_sum += x;
-                    y_sum += y;
                     z_sum += z;
+                    // Find the ground
+                    y_round = Math.Round(y, 5);
+                    if (yCount.ContainsKey(y_round))
+                    {
+                        yCount[y_round]++;
+                    }
+                    else
+                    {
+                        yCount.Add(y_round, 1);
+                    }
+
 
                     // Return the result
                     positions.Add(new Vector3(x, y, z));
@@ -139,19 +152,45 @@ public class PLYReader:MonoBehaviour
 
                 }
 
+
+
+
+                // Find the ground
+                var suspectPoints = new Dictionary<double, int>();
+                foreach (KeyValuePair<double, int> kvp in yCount)
+                {
+                    if (kvp.Value >= 100)
+                    {
+                        suspectPoints.Add(kvp.Key,kvp.Value);
+                    }
+                }
+                
+                float yLowest = float.MaxValue;
+                foreach (var key in suspectPoints.Keys)
+                {
+                    if (key < yLowest) yLowest = (float)key; 
+                }
+
                 // Correct offset of the coordinates
                 Vector3 offset = new Vector3();
                 for (int i = 0; i < vertexCount; i++)
                 {
-                    offset = new Vector3(x_sum / vertexCount, y_sum / vertexCount, z_sum / vertexCount);
+                    offset = new Vector3(x_sum / vertexCount, yLowest, z_sum / vertexCount);
                     positions[i] = positions[i] - offset;
                 }
                 Debug.Log(offset);
+
             }
         }
         catch (Exception e)
         {
             Application.Quit();
         }
+
+
+
+
+
     }
+
 }
