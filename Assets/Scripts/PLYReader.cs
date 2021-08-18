@@ -15,7 +15,7 @@ using UnityEngine;
 
 
 
-public class PLYReader:MonoBehaviour
+public class PLYReader
 {
     public static void ReadPoints(string file, out List<Vector3> positions, out List<Vector3> colors)
     {
@@ -191,10 +191,6 @@ public class PLYReader:MonoBehaviour
         {
             Application.Quit();
         }
-
-
-
-
 
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AdjustMenu : MonoBehaviour
+public class MenuControl : MonoBehaviour
 {
     public Transform target;
     public Transform lookat;
