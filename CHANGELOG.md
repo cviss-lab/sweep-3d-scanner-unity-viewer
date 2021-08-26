@@ -10,8 +10,4 @@
 - Create a new branch: vrsupport
 - Add VR support
 - Add movement and transformation control using VR
-
-# To-DO
-- Standardize Control System
-- Add more functions
   

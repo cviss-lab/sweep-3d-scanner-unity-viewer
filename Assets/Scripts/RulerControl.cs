@@ -106,7 +106,7 @@ public class RulerControl : MonoBehaviour
         }
 
         // Cancel 
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick) && secondPress)
+        if ((OVRInput.GetDown(OVRInput.Button.Four)|| OVRInput.GetDown(OVRInput.Button.Three)) && secondPress)
         {
             Destroy(markObj);
             firstPress = secondPress = confirm = false;
@@ -114,7 +114,7 @@ public class RulerControl : MonoBehaviour
         }
 
         //confirm
-        if (OVRInput.GetDown(OVRInput.Button.SecondaryThumbstick) && secondPress)
+        if ((OVRInput.GetDown(OVRInput.Button.SecondaryThumbstick)|| OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick)) && secondPress)
         {
             confirm = true;
         }

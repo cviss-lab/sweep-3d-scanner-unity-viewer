@@ -10,6 +10,7 @@
 /Assets/Oculus/
 /Backups/
 /Recordings/
+/Assets/Panorama/
 
 # Visual Studio 2015 cache directory
 /.vs/
@@ -38,3 +39,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.jpg
+*.jpg.meta
