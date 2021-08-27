@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputControl : MonoBehaviour
+public class OculusInputControl : MonoBehaviour
 {
     public float initialScale = 1.0f;
     // sensitivity for controlling the point cloud transform
