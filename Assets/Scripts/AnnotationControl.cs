@@ -11,10 +11,10 @@ public class AnnotationControl : MonoBehaviour
     
     //
     public GameObject btnConfirm;
-    public GameObject btnTilt;
-    public GameObject btnCrack;
-    public GameObject btnTunnel;
-    public GameObject btn;
+    public GameObject btnDefect;
+    public GameObject btnLocation;
+    public GameObject btnMaterial;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -31,10 +31,9 @@ public class AnnotationControl : MonoBehaviour
 
         inputField.SetActive(false);
         btnConfirm.SetActive(false);
-        btnTilt.SetActive(false);
-        btnCrack.SetActive(false);
-        btnTunnel.SetActive(false);
-        btn.SetActive(false);
+        btnDefect.SetActive(false);
+        btnLocation.SetActive(false);
+        btnMaterial.SetActive(false);
 
 }
 

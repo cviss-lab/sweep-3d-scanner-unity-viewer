@@ -5,14 +5,17 @@ using UnityEngine;
 public class SubMenuControl : MonoBehaviour
 {
     // Start is called before the first frame update
+    public GameObject self;
+    private bool isDisplay = false;
     void Start()
     {
-        
+        self.SetActive(isDisplay);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Display()
     {
-        
+        isDisplay = !isDisplay;
+        self.SetActive(isDisplay);
     }
+
 }

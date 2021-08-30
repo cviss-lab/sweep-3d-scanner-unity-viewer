@@ -13,7 +13,7 @@ public class PanoramaControl : MonoBehaviour
 
     private void Awake()
     {
-        this.gameObject.SetActive(false);
+        this.gameObject.SetActive(isDisplay);
     }
 
     // Update is called once per frame
