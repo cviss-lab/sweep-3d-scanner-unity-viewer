@@ -1,6 +1,6 @@
 ﻿// Adapted from www.kamend.com/2014/05/rendering-a-point-cloud-inside-unity/
 
-Shader "Custom/VertexColor" {
+Shader "PointCloud/VertexColor" {
     SubShader {
     Pass {
         LOD 200
