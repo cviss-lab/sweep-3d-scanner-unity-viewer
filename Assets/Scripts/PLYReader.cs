@@ -17,7 +17,7 @@ using UnityEngine;
 
 public class PLYReader
 {
-    public static void ReadPoints(string file, out List<Vector3> positions, out List<Vector3> colors)
+    public static Vector3 ReadPoints(string file, out List<Vector3> positions, out List<Vector3> colors)
     {
         // Initial the output
         positions = new List<Vector3>();
@@ -183,12 +183,14 @@ public class PLYReader
                     offset = new Vector3(x_sum / vertexCount, yLowest, z_sum / vertexCount);
                     positions[i] = positions[i] - offset;
                 }
-                Debug.Log(offset);
+                return offset;
+
 
             }
         }
         catch (Exception e)
         {
+            return new Vector3(0, 0, 0);
             Application.Quit();
         }
 

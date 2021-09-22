@@ -11,6 +11,7 @@ using SFB;
 public class PointCloudGenerator : MonoBehaviour
 {
     public Material pointCloudMaterial;
+    public Material meshMaterial;
 
     // maintained reference to the generated children (point cloud objects)
     private GameObject[] pointClouds;
@@ -29,7 +30,7 @@ public class PointCloudGenerator : MonoBehaviour
 
     void Awake()
     {
-        // Open a native file dialog, so the user can specify the file location
+        // Read the points from the file
         SFB.ExtensionFilter[] extensions = new[] { new ExtensionFilter("Point Cloud Files", "csv", "ply") };
         string[] paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
         if (paths.Length < 1)
@@ -42,8 +43,8 @@ public class PointCloudGenerator : MonoBehaviour
         string filePath = paths[0];
         string[] parts = filePath.Split('.');
         string extension = parts[parts.Length - 1];
+        Vector3 pos_offset = new Vector3();
 
-        // Read the points from the file
         switch (extension)
         {
             case "csv":
@@ -52,13 +53,17 @@ public class PointCloudGenerator : MonoBehaviour
                 break;
             case "ply":
             case "PLY":
-                PLYReader.ReadPoints(filePath, out data_pos, out data_col);
+                pos_offset = PLYReader.ReadPoints(filePath, out data_pos, out data_col);
                 break;
             default:
                 print("Error: Please specify a properly formatted CSV or binary PLY file.");
                 Application.Quit();
                 return;
         }
+
+
+
+
 
         // Number of PointCloud
         numPoints = data_pos.Count;
@@ -103,12 +108,42 @@ public class PointCloudGenerator : MonoBehaviour
             pointClouds[i] = obj;
         }
 
+
+        //----------------------------------------------------------------------------------------------------
+        // Read simplified mesh from the file
+        SFB.ExtensionFilter[] extensions2 = new[] { new ExtensionFilter("Point Cloud Files", "stl") };
+        string[] paths_obj = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions2, false);
+        if (paths_obj.Length < 1)
+        {
+            print("Error: Please specify a properly formatted obj file.");
+            Application.Quit();
+            return;
+        }
+
+        // generate mesh object
+        Mesh[] holderMesh;
+        //FastObjImporter newMesh = new FastObjImporter();
+        //holderMesh = newMesh.ImportFile(paths_obj[0], pos_offset);
+        holderMesh = STLReader.Import(paths_obj[0], pos_offset);
+
+        GameObject meshObj = new GameObject("meshObj");
+        MeshRenderer renderer = meshObj.AddComponent<MeshRenderer>();
+        MeshFilter filter = meshObj.AddComponent<MeshFilter>();
+
+        for(int i=0;i<holderMesh.Length;i++)
+        {
+            GameObject subMeshObj = new GameObject("subMeshObj " + i.ToString());
+            MeshRenderer subRenderer = subMeshObj.AddComponent<MeshRenderer>();
+            subRenderer.material = meshMaterial;
+            MeshFilter subFilter = subMeshObj.AddComponent<MeshFilter>();
+            subFilter.mesh = holderMesh[i];
+            subMeshObj.transform.SetParent(meshObj.transform);
+        }
+
+        //meshObj.transform.position += pos_offset;
+
+
+
+
     }
-
-
-    public void generateGround()
-    {
-
-    }
-
 }
