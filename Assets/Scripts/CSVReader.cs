@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 /// <summary>
+/// DISUSE
 /// Naively parses a csv file of an expected structure into Vector3 position array and Vector3 color array.
 /// Expected structure is vertices with following attributes ONLY: x,y,z,R,G,B.
 /// Vector3 positions represents the coordinates of a point, Vector3 colors represents the color of a point.

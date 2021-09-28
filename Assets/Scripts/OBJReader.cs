@@ -3,6 +3,12 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
+/// <summary>
+/// DISUSE
+/// This is a basic fast ObjImporter specifically made for importing Blender obj files at runtime, it loads vertices, faces, normals and the primary uv map.
+/// Only support model with points less than 65000.
+/// https://wiki.unity3d.com/index.php/FastObjImporter
+/// </summary>
 public sealed class FastObjImporter
 {
 

@@ -9,7 +9,14 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Threading;
 
-/*Import methods for STL files*/
+/// <summary>
+/// Import Binary & ASCII STL files in editor or at runtime.
+/// Can load a mesh with more than 65,534 vertices
+/// Handles the conversion from centimeters to meters.
+/// Handles the conversion from right handed coordinates where z is up, to unity's left handed coordinates where y is up.
+/// Handles the offset 
+/// https://github.com/karl-/pb_Stl
+/// </summary>
 public class STLReader
 {
     const int MAX_FACETS_PER_MESH = 65535 / 3;

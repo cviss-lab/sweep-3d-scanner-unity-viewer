@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
+// Used to control Ruler object.
+// Measure distance between two points.
 public class RulerControl : MonoBehaviour
 {
     // Input control
@@ -41,7 +43,6 @@ public class RulerControl : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Measure length
@@ -80,6 +81,8 @@ public class RulerControl : MonoBehaviour
                 lineRenderer.startWidth = 0.005f;
                 lineRenderer.endWidth = 0.005f;
                 lineRenderer.useWorldSpace = true;
+                Material whiteDiffuseMat = new Material(Shader.Find("Unlit/Texture"));
+                lineRenderer.material = whiteDiffuseMat;
 
 
                 firstPress = true;

@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SFB;
+using System.IO;
 
 /// <summary>
 /// Requests the user select .csv and .ply file.
 /// Reads the points from the file.
 /// Splits the points into multiple children each of which is a PointCloud object with a portion of the points.
 /// </summary>
+/// 
+
 public class PointCloudGenerator : MonoBehaviour
 {
     public Material pointCloudMaterial;
@@ -28,9 +31,14 @@ public class PointCloudGenerator : MonoBehaviour
     // The maximum number of vertices unity will allow per single mesh
     const int MAX_NUMBER_OF_POINTS_PER_MESH = 65000;
 
+    // panorama obejct
+    public GameObject panoramaObj;
+    public GameObject sphereObj;
     void Awake()
     {
+        //----------------------------------------------------------------------------------------------------
         // Read the points from the file
+        //----------------------------------------------------------------------------------------------------
         SFB.ExtensionFilter[] extensions = new[] { new ExtensionFilter("Point Cloud Files", "csv", "ply") };
         string[] paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
         if (paths.Length < 1)
@@ -111,6 +119,7 @@ public class PointCloudGenerator : MonoBehaviour
 
         //----------------------------------------------------------------------------------------------------
         // Read simplified mesh from the file
+        //----------------------------------------------------------------------------------------------------
         SFB.ExtensionFilter[] extensions2 = new[] { new ExtensionFilter("Point Cloud Files", "stl") };
         string[] paths_obj = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions2, false);
         if (paths_obj.Length < 1)
@@ -125,6 +134,7 @@ public class PointCloudGenerator : MonoBehaviour
         //FastObjImporter newMesh = new FastObjImporter();
         //holderMesh = newMesh.ImportFile(paths_obj[0], pos_offset);
         holderMesh = STLReader.Import(paths_obj[0], pos_offset);
+        
 
         GameObject meshObj = new GameObject("meshObj");
         MeshRenderer renderer = meshObj.AddComponent<MeshRenderer>();
@@ -140,10 +150,50 @@ public class PointCloudGenerator : MonoBehaviour
             subMeshObj.transform.SetParent(meshObj.transform);
         }
 
-        //meshObj.transform.position += pos_offset;
+        meshObj.transform.SetParent(panoramaObj.transform);
+
+
+        //----------------------------------------------------------------------------------------------------
+        // Read panorama images from the file
+        //----------------------------------------------------------------------------------------------------
+        SFB.ExtensionFilter[] extensions3 = new[] { new ExtensionFilter("Point Cloud Files", "jpg") };
+        var paths_image = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions3, true);
+
+        for (int i = 0;i<paths_image.Length;i++)
+        {
+            // create new material
+            Material material = new Material(Shader.Find("Pano360Shader"));
+            Texture2D tex = null;
+            byte[] fileData;
+            if (File.Exists(filePath))
+            {
+                fileData = File.ReadAllBytes(paths_image[i]);
+                tex = new Texture2D(2, 2);
+                tex.LoadImage(fileData); 
+            }
+            material.mainTexture = tex;
+
+            // create new sphere
+            GameObject newSphereObj = Instantiate(sphereObj);
+            newSphereObj.transform.position = getPosition()[i];
+            newSphereObj.GetComponent<MeshRenderer>().material = material;
+            newSphereObj.name = "image" + i.ToString();
 
 
 
+            newSphereObj.transform.SetParent(panoramaObj.transform);
+        }
+    }
+
+    // demo 
+    private List<Vector3> getPosition()
+    {
+        List<Vector3> positions = new List<Vector3>(); ;
+        positions.Add(new Vector3(0, 1, 1));
+        positions.Add(new Vector3(1, 1, 1));
+        positions.Add(new Vector3(0, 1, 0));
+
+        return positions;
 
     }
 }

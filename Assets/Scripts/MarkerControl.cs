@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Used to control Marker object.
+// Create annotation at one point.
 public class MarkerControl : MonoBehaviour
 {
 
@@ -122,7 +124,7 @@ public class MarkerControl : MonoBehaviour
             annotation.SetActive(true);
             annotation.transform.position = transform.position + new Vector3(0, 0.5f, 0);
         }
-        else if (firstPress && secondPress &&!confirm)
+        else if (firstPress && secondPress && !confirm)
         {
             Quaternion angle = Quaternion.LookRotation(-(lookat.position - annotation.transform.position));
             annotation.transform.rotation = Quaternion.Slerp(annotation.transform.rotation, angle, rotateSpeed * Time.deltaTime);

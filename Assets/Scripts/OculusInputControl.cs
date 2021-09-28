@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Handles the basic control from Oculus controllers
 public class OculusInputControl : MonoBehaviour
 {
     public float initialScale = 1.0f;
